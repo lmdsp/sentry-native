@@ -8,7 +8,9 @@ sentry__unwind_stack_libbacktrace(
 {
     if (addr) {
 #ifdef MAC_OS_X_VERSION_10_14
-        return backtrace_from_fp(addr, ptrs, max_frames);
+        if (__builtin_available(macOS 10.14, *)) {
+            return backtrace_from_fp(addr, ptrs, max_frames);
+        }
 #endif
         return 0;
     } else if (uctx) {
