@@ -9,6 +9,7 @@
 	url = https://chromium.googlesource.com/linux-syscall-support
 [submodule "external/crashpad"]
 	path = external/crashpad
-	url = https://github.com/lmdsp/crashpad.git
+	url = git@github.com:lmdsp/crashpad.git
+	branch = report_dialog
 	# url = https://github.com/getsentry/crashpad.git
-	branch = getsentry
+	# branch = getsentry
