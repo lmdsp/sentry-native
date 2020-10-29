@@ -198,9 +198,17 @@ endfunction()
 
 # ===== sentry library =====
 
-add_library(sentry ${SENTRY_LIBRARY_TYPE} "${PROJECT_SOURCE_DIR}/vendor/mpack.c" )
+add_library(sentry ${SENTRY_LIBRARY_TYPE} "${PROJECT_SOURCE_DIR}/vendor/mpack.c")
 add_library(sentry::sentry ALIAS sentry)
 add_subdirectory(src)
+
+# we do not need this on android, only linux
+if(LINUX)
+	target_sources(sentry PRIVATE
+		"${PROJECT_SOURCE_DIR}/vendor/stb_sprintf.c"
+		"${PROJECT_SOURCE_DIR}/vendor/stb_sprintf.h"
+	)
+endif()
 
 set_target_properties(sentry PROPERTIES PUBLIC_HEADER "include/sentry.h")
 
