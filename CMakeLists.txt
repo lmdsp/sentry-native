@@ -129,8 +129,8 @@ endif()
 if(SENTRY_BACKEND_CRASHPAD AND ANDROID)
 	message(FATAL_ERROR "The Crashpad backend is not currently supported on Android")
 endif()
-if(SENTRY_BACKEND_BREAKPAD AND NOT (LINUX OR WIN32))
-	message(FATAL_ERROR "The Breakpad backend is currently only supported on Linux and Windows")
+if(SENTRY_BACKEND_BREAKPAD AND ANDROID)
+	message(FATAL_ERROR "The Breakpad backend is not currently supported on Android")
 endif()
 
 message(STATUS "SENTRY_TRANSPORT=${SENTRY_TRANSPORT}")
@@ -402,6 +402,10 @@ if(SENTRY_BACKEND_CRASHPAD)
 		install(EXPORT crashpad_export NAMESPACE sentry_crashpad:: FILE sentry_crashpad-targets.cmake
 			DESTINATION "${CMAKE_INSTALL_CMAKEDIR}"
 		)
+		if(WIN32 AND MSVC)
+			sentry_install(FILES $<TARGET_PDB_FILE:crashpad_handler> 
+				DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+		endif()
 	endif()
 	add_dependencies(sentry crashpad::handler)
 elseif(SENTRY_BACKEND_BREAKPAD)
@@ -444,6 +448,10 @@ sentry_install(EXPORT sentry NAMESPACE sentry:: FILE sentry-targets.cmake
 	DESTINATION "${CMAKE_INSTALL_CMAKEDIR}")
 sentry_install(FILES "${PROJECT_BINARY_DIR}/sentry-config.cmake"
 	DESTINATION "${CMAKE_INSTALL_CMAKEDIR}")
+if(WIN32 AND MSVC AND SENTRY_BUILD_SHARED_LIBS)
+	sentry_install(FILES $<TARGET_PDB_FILE:sentry> 
+		DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+endif()
 
 # ===== tests =====
 
