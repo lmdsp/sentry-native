@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## 0.4.7
+
+**Features**:
+
+- Events will automatically get an `os` context with OS version information.
+- Added a new `max_breadcrumbs` option.
+
+**Fixes**:
+
+- Fixed some memory leaks related to bounded breadcrumbs.
+
+## 0.4.6
 
 **Fixes**:
 
